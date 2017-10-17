@@ -114,7 +114,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     
     @IBAction func cancel(_ sender: UIBarButtonItem) {
         
-        dismiss(animated:true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
 
