@@ -95,6 +95,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         
     }
     
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any])
     {
         // The info dictionary may contain multiple representations of the image. You want to use the original.
@@ -132,6 +133,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
 
+    //MARK: SaveInformation to cloud & addMealsDelegate to push data to tableview
     @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
         
         //error handling
@@ -160,18 +162,14 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
             saveDelegate?.addMealObject(meal: meal)
         }
         
-
-        
-
-        dismiss(animated: true, completion: nil)
+        navigationController?.popViewController(animated: true)
     }
     
         
         
 
     
-    //MARK: Private methods
-    
+    //MARK: Save button after certain conditions
     private func updateSaveButtonState() {
         // Disable the Save button if the text field is empty.
         let text = nameTextField.text ?? ""

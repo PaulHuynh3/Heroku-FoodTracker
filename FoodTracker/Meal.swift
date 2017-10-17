@@ -16,18 +16,14 @@ class Meal: PFObject{
     
     //MARK: Properties
     @NSManaged var name: String
-    //this is stored when pffile is called and shit
+    //when i call pffile i store the image as this photo
     var photo: UIImage?
     
+    //picture currently saved as data so i need to call this pffile to get image.
     @NSManaged var pfFile: PFFile?
     
     @NSManaged var star: Int
     
-    
-    //MARK: Archiving Paths
-    
-    static let DocumentsDirectory = FileManager().urls(for: .documentDirectory, in: .userDomainMask).first!
-    static let ArchiveURL = DocumentsDirectory.appendingPathComponent("meals")
     
     
     //MARK: Initialization
@@ -55,9 +51,7 @@ class Meal: PFObject{
 }
 
 
-
-
-//THIS ALLOWS ME TO SUBCLASS SO I CAN USE the properties the normal way
+//Allows me to use subclass in MealViewController save button.. so i can use dot notation properties.
 extension Meal: PFSubclassing {
 
     static func parseClassName() -> String {

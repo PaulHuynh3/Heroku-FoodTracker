@@ -62,7 +62,7 @@ class MealTableViewController: UITableViewController, SaveItemDelegate
         
         
         cell.setUpCell(meal: meal)
-
+        
         return cell
     }
     
@@ -79,18 +79,6 @@ class MealTableViewController: UITableViewController, SaveItemDelegate
         }
     }
     
-    //MARK: Delegate for saving
-    
-    func addMealObject(meal: Meal) -> Void {
-    
-        meals.append(meal)
-        self.tableView.reloadData()
-        
-    }
-    
-    
-    
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -99,12 +87,13 @@ class MealTableViewController: UITableViewController, SaveItemDelegate
         switch(segue.identifier ?? "") {
         //different case for different scenarios
         case "AddItem":
-
-        
+            
+            
             guard let mealViewController = segue.destination as? MealViewController else{
                 fatalError("Unexpected destination:\(segue.destination)")
             }
             
+            //Setting this view controller as the delegate so the information being passed from the child is received.
             mealViewController.saveDelegate = self
             
             os_log("Adding a new meal.", log: OSLog.default, type: .debug)
@@ -130,39 +119,23 @@ class MealTableViewController: UITableViewController, SaveItemDelegate
         }
     }
     
-
-    
-    
-    
-    
-    
-    //DATA persist function
-    private func saveMeals () {
-        let isSuccessfulSave = NSKeyedArchiver.archiveRootObject(meals, toFile: Meal.ArchiveURL.path)
-        if isSuccessfulSave {
-            os_log("Meals successfully saved.", log: OSLog.default, type: .debug)
-        } else {
-            os_log("Failed to save meals...", log: OSLog.default, type: .error)
-        }
+    //MARK: DelegateSavingMeals
+    //save meal from the MealViewController.(when the meal is save..name,int,etc is saved too)
+    func addMealObject(meal: Meal) -> Void {
         
-        
-        
+        meals.append(meal)
+        self.tableView.reloadData()
         
     }
     
-    //Load the meal list
     
-    private func loadMeals() -> [Meal]?  {
-        return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
-    }
-    
-    //fetch meals from cloud
+    //MARK: FetchMealsCloud
     func fetchMeal() {
         let query = PFQuery(className: "Meal")
         //findObjectsInBackground already made the network request since its a server therefore we dont need to call it back like the regular network request.
         query.findObjectsInBackground {(mealsContent:[PFObject]?, error: Error?) in
             
-
+            
             if let error = error{
                 print(#line, error.localizedDescription)
                 return
