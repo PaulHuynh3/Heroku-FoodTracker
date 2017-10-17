@@ -10,7 +10,7 @@ import UIKit
 import os.log
 import Parse
 
-class MealTableViewController: UITableViewController, MealViewController
+class MealTableViewController: UITableViewController, SaveItemDelegate
 {
     
     //MARK: Properties
@@ -79,6 +79,18 @@ class MealTableViewController: UITableViewController, MealViewController
         }
     }
     
+    //MARK: Delegate for saving
+    
+    func addMealObject(meal: Meal) -> Void {
+    
+        meals.append(meal)
+        self.tableView.reloadData()
+        
+    }
+    
+    
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
@@ -87,6 +99,14 @@ class MealTableViewController: UITableViewController, MealViewController
         switch(segue.identifier ?? "") {
         //different case for different scenarios
         case "AddItem":
+
+        
+            guard let mealViewController = segue.destination as? MealViewController else{
+                fatalError("Unexpected destination:\(segue.destination)")
+            }
+            
+            mealViewController.saveDelegate = self
+            
             os_log("Adding a new meal.", log: OSLog.default, type: .debug)
             
         case "ShowDetail":
@@ -95,7 +115,7 @@ class MealTableViewController: UITableViewController, MealViewController
             }
             
             guard let selectedMealCell = sender as? MealTableViewCell else {
-                fatalError("Unexpected sender: \(sender)")
+                fatalError("Unexpected sender: \(String(describing: sender))")
             }
             
             guard let indexPath = tableView.indexPath(for: selectedMealCell) else {
@@ -106,33 +126,11 @@ class MealTableViewController: UITableViewController, MealViewController
             mealDetailViewController.meal = selectedMeal
             
         default:
-            fatalError("Unexpected Segue Identifier; \(segue.identifier)")
+            fatalError("Unexpected Segue Identifier; \(String(describing: segue.identifier))")
         }
     }
     
-    //CURRENTLY NOT DOING ANYTHING // NEED TO SET IT BACK TO UNWIND later
-    //MARK: Actions
-    @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
-        if let sourceViewController = sender.source as? MealViewController, let meal = sourceViewController.meal {
-            
-            if let selectedIndexPath = tableView.indexPathForSelectedRow {
-                // Update an existing meal.
-                meals[selectedIndexPath.row] = meal
-                tableView.reloadRows(at: [selectedIndexPath], with: .none)
-            }
-            else {
-                
-                // Add a new meal.
-                let newIndexPath = IndexPath(row: meals.count, section: 0)
-                
-                meals.append(meal)
-                tableView.insertRows(at: [newIndexPath], with: .automatic)
-            }
-            //save the meals for data persist
-            saveMeals()
-            
-        }
-    }
+
     
     
     
@@ -147,7 +145,6 @@ class MealTableViewController: UITableViewController, MealViewController
             os_log("Failed to save meals...", log: OSLog.default, type: .error)
         }
         
-        //Save to parse
         
         
         

@@ -10,8 +10,10 @@ import UIKit
 import os.log
 import Parse
 
-protocol saveItemDelegate {
-    func saveMeal(addObject:Meal)
+
+
+protocol SaveItemDelegate {
+    func addMealObject(meal:Meal)
 }
 
 
@@ -24,7 +26,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var ratingControl: RatingControl!
     @IBOutlet weak var saveButton: UIBarButtonItem!
     
-    var saveDelegate: saveItemDelegate 
+    var saveDelegate: SaveItemDelegate?
     
     /*
      This value is either passed by `MealTableViewController` in `prepare(for:sender:)`
@@ -152,6 +154,13 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         
         
         meal?.saveInBackground()
+        
+        if let meal = meal {
+        
+            saveDelegate?.addMealObject(meal: meal)
+        }
+        
+
         
 
         dismiss(animated: true, completion: nil)

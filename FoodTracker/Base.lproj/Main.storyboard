@@ -60,7 +60,7 @@
                     <navigationItem key="navigationItem" title="Your Meals" id="sk6-b2-4JF">
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="U18-Tm-eS4">
                             <connections>
-                                <segue destination="ZwQ-D0-3Yn" kind="show" identifier="AddItem" id="cOX-B0-nAa"/>
+                                <segue destination="BYZ-38-t0r" kind="show" identifier="AddItem" id="7rF-rG-Gpp"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -168,29 +168,11 @@
             </objects>
             <point key="canvasLocation" x="-522.39999999999998" y="138.98050974512745"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="gzJ-xo-fsw">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZwQ-D0-3Yn" sceneMemberID="viewController">
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5J0-Zn-Ro4">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="BYZ-38-t0r" kind="relationship" relationship="rootViewController" id="TY7-cQ-FLW"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dfZ-Mh-nwb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1241" y="562"/>
-        </scene>
     </scenes>
     <resources>
         <image name="defaultphoto_2x" width="640" height="640"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="JAE-05-E82"/>
+        <segue reference="7rF-rG-Gpp"/>
     </inferredMetricsTieBreakers>
 </document>
