@@ -10,6 +10,10 @@ import UIKit
 import os.log
 import Parse
 
+protocol saveItemDelegate {
+    func saveMeal(addObject:Meal)
+}
+
 
 class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
@@ -19,6 +23,8 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     @IBOutlet weak var photoImageView: UIImageView!
     @IBOutlet weak var ratingControl: RatingControl!
     @IBOutlet weak var saveButton: UIBarButtonItem!
+    
+    var saveDelegate: saveItemDelegate 
     
     /*
      This value is either passed by `MealTableViewController` in `prepare(for:sender:)`
@@ -143,17 +149,6 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         }
         //since Meal() is a subclass of NSManaged
         let meal = Meal(name: name, rating: ratingControl.rating, pfFile: pfFileData)
-        
-        
-//        // Create PFFile from data
-//        let file = PFFile(data: data)
-//        // Save photo as data cant be meal.photo as its not a nsmanagedobject.
-//        meal?["photo"] = file
-//        meal?.photo = photo
-
-
-        
-        
         
         
         meal?.saveInBackground()
