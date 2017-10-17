@@ -8,13 +8,20 @@
 
 import UIKit
 import os.log
+import Parse
 
-class Meal: NSObject, NSCoding{
+//since this is a subclass of PFObject it allows us to use its property must use @NSManaged
+// Image is a little different you have to save it as a PFFile then retrieve it using data and saving it as an image so it requires another thread.(they have a reference to the photo) they dont want to upload the picture on to their domain.
+class Meal: PFObject{
     
     //MARK: Properties
-    var name: String
+    @NSManaged var name: String
+    //this is stored when pffile is called and shit
     var photo: UIImage?
-    var rating: Int
+    
+    @NSManaged var pfFile: PFFile?
+    
+    @NSManaged var star: Int
     
     
     //MARK: Archiving Paths
@@ -23,22 +30,11 @@ class Meal: NSObject, NSCoding{
     static let ArchiveURL = DocumentsDirectory.appendingPathComponent("meals")
     
     
-    
-    //MARK: Types:
-    struct PropertyKey {
-        static let name = "name"
-        static let photo = "photo"
-        static let rating = "rating"
-    }
-    
-    
-    
-    
     //MARK: Initialization
     //init will fail if there is no name or if the rating is negative
-    init?(name: String, photo: UIImage?, rating: Int)
+    convenience init?(name: String, rating: Int, pfFile: PFFile)
     {
-        
+        self.init()
 
         // The name must not be empty
         guard !name.isEmpty else {
@@ -52,36 +48,20 @@ class Meal: NSObject, NSCoding{
         
         // Initialize stored properties.
         self.name = name
-        self.photo = photo
-        self.rating = rating
+        self.pfFile = pfFile
+        self.star = rating
     }
     
-    //MARK: NSCoding
-    
-    func encode(with aCoder: NSCoder) {
-        aCoder.encode(name, forKey: PropertyKey.name)
-        aCoder.encode(photo, forKey: PropertyKey.photo)
-        aCoder.encode(rating, forKey: PropertyKey.rating)
+}
+
+
+
+
+//THIS ALLOWS ME TO SUBCLASS SO I CAN USE the properties the normal way
+extension Meal: PFSubclassing {
+
+    static func parseClassName() -> String {
+        return "Meal"
     }
-    
-    required convenience init?(coder aDecoder: NSCoder) {
-        
-        // The name is required. If we cannot decode a name string, the initializer should fail.
-        guard let name = aDecoder.decodeObject(forKey: PropertyKey.name) as? String else {
-            os_log("Unable to decode the name for a Meal object.", log: OSLog.default, type: .debug)
-            return nil
-        }
-        
-        // Because photo is an optional property of Meal, just use conditional cast.
-        let photo = aDecoder.decodeObject(forKey: PropertyKey.photo) as? UIImage
-        
-        let rating = aDecoder.decodeInteger(forKey: PropertyKey.rating)
-        
-        // Must call designated initializer.
-        self.init(name: name, photo: photo, rating: rating)
-        
-    }
-    
-    
-    
+
 }

@@ -35,7 +35,7 @@
 		0F2965CFE7E9B9AE1AF653ED /* Pods-FoodTracker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodTracker.release.xcconfig"; path = "Pods/Target Support Files/Pods-FoodTracker/Pods-FoodTracker.release.xcconfig"; sourceTree = "<group>"; };
 		4919F972D1202EA752206601 /* Pods-FoodTrackerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodTrackerTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-FoodTrackerTests/Pods-FoodTrackerTests.release.xcconfig"; sourceTree = "<group>"; };
 		530AE08ABCCDECD6D654CEBF /* Pods_FoodTracker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FoodTracker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		881BEA9B1F8AD3CE001DD444 /* Meal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Meal.swift; sourceTree = "<group>"; };
+		881BEA9B1F8AD3CE001DD444 /* Meal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Meal.swift; path = FoodTracker/Meal.swift; sourceTree = "<group>"; };
 		881BEA9D1F8AD7AB001DD444 /* MealTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MealTableViewCell.swift; path = ../MealTableViewCell.swift; sourceTree = "<group>"; };
 		881BEA9F1F8ADB78001DD444 /* MealTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MealTableViewController.swift; sourceTree = "<group>"; };
 		889309441F89B0FA00761747 /* FoodTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FoodTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -51,6 +51,7 @@
 		889309671F8ABBC500761747 /* RatingControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RatingControl.swift; sourceTree = "<group>"; };
 		A9000DA9FD46554315CD2B5B /* Pods-FoodTracker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodTracker.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FoodTracker/Pods-FoodTracker.debug.xcconfig"; sourceTree = "<group>"; };
 		DA1A377587AFE8AEDE492B93 /* Pods-FoodTrackerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FoodTrackerTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-FoodTrackerTests/Pods-FoodTrackerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		DAAA47161F9594EA00025A41 /* FoodTracker-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "FoodTracker-Bridging-Header.h"; sourceTree = "<group>"; };
 		FDB7967801A6A8CBED86E933 /* Pods_FoodTrackerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FoodTrackerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -98,6 +99,7 @@
 			isa = PBXGroup;
 			children = (
 				889309461F89B0FA00761747 /* FoodTracker */,
+				DAD1734E1F968C6A007A442A /* Model */,
 				8893095B1F89B0FA00761747 /* FoodTrackerTests */,
 				889309451F89B0FA00761747 /* Products */,
 				5280DF7FD7472411BD2A5887 /* Pods */,
@@ -119,7 +121,6 @@
 			children = (
 				889309471F89B0FA00761747 /* AppDelegate.swift */,
 				889309671F8ABBC500761747 /* RatingControl.swift */,
-				881BEA9B1F8AD3CE001DD444 /* Meal.swift */,
 				8893094B1F89B0FA00761747 /* Main.storyboard */,
 				889309491F89B0FA00761747 /* MealViewController.swift */,
 				881BEA9F1F8ADB78001DD444 /* MealTableViewController.swift */,
@@ -127,6 +128,7 @@
 				8893094E1F89B0FA00761747 /* Assets.xcassets */,
 				889309501F89B0FA00761747 /* LaunchScreen.storyboard */,
 				889309531F89B0FA00761747 /* Info.plist */,
+				DAAA47161F9594EA00025A41 /* FoodTracker-Bridging-Header.h */,
 			);
 			path = FoodTracker;
 			sourceTree = "<group>";
@@ -138,6 +140,14 @@
 				8893095E1F89B0FA00761747 /* Info.plist */,
 			);
 			path = FoodTrackerTests;
+			sourceTree = "<group>";
+		};
+		DAD1734E1F968C6A007A442A /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				881BEA9B1F8AD3CE001DD444 /* Meal.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,6 +207,7 @@
 					889309431F89B0FA00761747 = {
 						CreatedOnToolsVersion = 8.3.3;
 						DevelopmentTeam = 9T98QB7DLD;
+						LastSwiftMigration = 0830;
 						ProvisioningStyle = Automatic;
 					};
 					889309571F89B0FA00761747 = {
@@ -499,11 +510,14 @@
 			baseConfigurationReference = A9000DA9FD46554315CD2B5B /* Pods-FoodTracker.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 9T98QB7DLD;
 				INFOPLIST_FILE = FoodTracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Paul.FoodTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FoodTracker/FoodTracker-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
@@ -513,11 +527,13 @@
 			baseConfigurationReference = 0F2965CFE7E9B9AE1AF653ED /* Pods-FoodTracker.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				DEVELOPMENT_TEAM = 9T98QB7DLD;
 				INFOPLIST_FILE = FoodTracker/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Paul.FoodTracker;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "FoodTracker/FoodTracker-Bridging-Header.h";
 				SWIFT_VERSION = 3.0;
 			};
 			name = Release;

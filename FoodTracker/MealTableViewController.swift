@@ -8,6 +8,7 @@
 
 import UIKit
 import os.log
+import Parse
 
 class MealTableViewController: UITableViewController
 {
@@ -15,6 +16,11 @@ class MealTableViewController: UITableViewController
     //MARK: Properties
     
     var meals = [Meal]()
+    //happens everytime the view navigates from save to this screen
+    
+    override func viewWillAppear(_ animated: Bool) {
+    }
+    
     
     override func viewDidLoad()
     {
@@ -22,15 +28,7 @@ class MealTableViewController: UITableViewController
         
         // Use the edit button item provided by the table view controller.
         navigationItem.leftBarButtonItem = editButtonItem
-        
-        // Load any saved meals, otherwise load sample data.
-        if let savedMeals = loadMeals() {
-            meals += savedMeals
-        } else {
-            // Load the sample data.
-            loadSampleMeals()
-        }
-
+        fetchMeal()
     }
     
     
@@ -58,56 +56,29 @@ class MealTableViewController: UITableViewController
             fatalError("The dequeued cell is not an instance of MealTableViewCell.")
         }
         
+        
         // Fetches the appropriate meal for the data source layout.
         let meal = meals[indexPath.row]
         
-        cell.nameLabel.text = meal.name
-        cell.photoImageView.image = meal.photo
-        cell.ratingControl.rating = meal.rating
         
+        cell.setUpCell(meal: meal)
+
         return cell
     }
     
     
-    /*
-     // Override to support conditional editing of the table view.
-     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the specified item to be editable.
-     return true
-     }
-     */
-    
-  
     // Allows delete functionality in main view!
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             // Delete the row from the data source
             meals.remove(at: indexPath.row)
             
-            //data persist
-            saveMeals()
-            
             tableView.deleteRows(at: [indexPath], with: .fade)
         } else if editingStyle == .insert {
             // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
         }
     }
- 
     
-    /*
-     // Override to support rearranging the table view.
-     override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-     
-     }
-     */
-    
-    /*
-     // Override to support conditional rearranging of the table view.
-     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-     // Return false if you do not want the item to be re-orderable.
-     return true
-     }
-     */
     
     
     // MARK: - Navigation
@@ -143,6 +114,7 @@ class MealTableViewController: UITableViewController
         }
     }
     
+    //CURRENTLY NOT DOING ANYTHING // NEED TO SET IT BACK TO UNWIND later
     //MARK: Actions
     @IBAction func unwindToMealList(sender: UIStoryboardSegue) {
         if let sourceViewController = sender.source as? MealViewController, let meal = sourceViewController.meal {
@@ -160,42 +132,14 @@ class MealTableViewController: UITableViewController
                 meals.append(meal)
                 tableView.insertRows(at: [newIndexPath], with: .automatic)
             }
-           //save the meals for data persist
+            //save the meals for data persist
             saveMeals()
             
         }
     }
     
     
-    //MARK: Private Methods
     
-    private func loadSampleMeals()
-    {
-        let photo1 = UIImage(named: "meal1")
-        let photo2 = UIImage(named: "meal2")
-        let photo3 = UIImage(named: "meal3")
-        
-        guard let meal1 = Meal(name: "Caprese Salad", photo: photo1, rating: 4)
-            else
-        {
-            fatalError("Unable to instantiate meal1")
-        }
-        
-        guard let meal2 = Meal(name: "Chicken and Potatoes", photo: photo2, rating: 5)
-            else
-        {
-            fatalError("Unable to instantiate meal2")
-        }
-        
-        guard let meal3 = Meal(name: "Pasta with Meatballs", photo: photo3, rating: 3)
-            else
-        {
-            fatalError("Unable to instantiate meal2")
-        }
-        
-        //add the objects to the array of meals
-        meals += [meal1, meal2, meal3]
-    }
     
     
     //DATA persist function
@@ -206,7 +150,11 @@ class MealTableViewController: UITableViewController
         } else {
             os_log("Failed to save meals...", log: OSLog.default, type: .error)
         }
-    
+        
+        //Save to parse
+        
+        
+        
     }
     
     //Load the meal list
@@ -214,5 +162,25 @@ class MealTableViewController: UITableViewController
     private func loadMeals() -> [Meal]?  {
         return NSKeyedUnarchiver.unarchiveObject(withFile: Meal.ArchiveURL.path) as? [Meal]
     }
+    
+    //fetch meals from cloud
+    func fetchMeal() {
+        let query = PFQuery(className: "Meal")
+        //findObjectsInBackground already made the network request since its a server therefore we dont need to call it back like the regular network request.
+        query.findObjectsInBackground {(mealsContent:[PFObject]?, error: Error?) in
+            
+
+            if let error = error{
+                print(#line, error.localizedDescription)
+                return
+            }
+            
+            self.meals.append(contentsOf: mealsContent as! [Meal])
+            self.tableView.reloadData()
+        }
+        
+    }
+    
+    
     
 }

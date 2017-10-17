@@ -8,6 +8,8 @@
 
 import UIKit
 import os.log
+import Parse
+
 
 class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
@@ -36,7 +38,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
             navigationItem.title = meal.name
             nameTextField.text   = meal.name
             photoImageView.image = meal.photo
-            ratingControl.rating = meal.rating
+            ratingControl.rating = meal.star
         }
         
         //enable the save button only if the text field has a valid meal name
@@ -106,30 +108,7 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         dismiss(animated:true, completion: nil)
     }
     
-    
-    // saves the item user enters into mealviewcontroller..
-    // This method lets you configure a view controller before it's presented.
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?)
-    {
-        super.prepare(for: segue, sender: sender)
-        
-        // Configure the destination view controller only when the save button is pressed.
-        guard let button = sender as? UIBarButtonItem, button === saveButton else
-        {
-            os_log("The save button was not pressed, cancelling", log: OSLog.default, type: .debug)
-            return
-        }
-        
-        let name = nameTextField.text ?? ""
-        let photo = photoImageView.image
-        let rating = ratingControl.rating
-        
-        // Set the meal to be passed to MealTableViewController after the unwind segue.
-        meal = Meal(name: name, photo: photo, rating: rating)
-        
-    }
-    
-    
+
     //MARK: Actions
     @IBAction func selectImageFromPhotoLibrary(_ sender: UITapGestureRecognizer)
     {
@@ -145,6 +124,48 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
     }
     
 
+    @IBAction func saveButtonTapped(_ sender: UIBarButtonItem) {
+        
+        //error handling
+        let name = nameTextField.text ?? ""
+        
+        // Convert photo to data
+        guard let photo = photoImageView.image else {
+            return
+        }
+        
+        // compress photo and save it to data
+
+        let data = PFFile(data: UIImageJPEGRepresentation(photo, 0.5)!)
+        
+        guard let pfFileData =  data else {
+            return
+        }
+        //since Meal() is a subclass of NSManaged
+        let meal = Meal(name: name, rating: ratingControl.rating, pfFile: pfFileData)
+        
+        
+//        // Create PFFile from data
+//        let file = PFFile(data: data)
+//        // Save photo as data cant be meal.photo as its not a nsmanagedobject.
+//        meal?["photo"] = file
+//        meal?.photo = photo
+
+
+        
+        
+        
+        
+        meal?.saveInBackground()
+        
+
+        dismiss(animated: true, completion: nil)
+    }
+    
+        
+        
+
+    
     //MARK: Private methods
     
     private func updateSaveButtonState() {
@@ -152,7 +173,6 @@ class MealViewController: UIViewController, UITextFieldDelegate, UIImagePickerCo
         let text = nameTextField.text ?? ""
         saveButton.isEnabled = !text.isEmpty
     }
-    
     
     
     

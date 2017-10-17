@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Parse
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -17,10 +18,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
       
         configureParse()
+        
         return true
     }
 
-  
     
     private func configureParse() {
         
@@ -30,8 +31,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             $0.server = "http://paulparsedemo.herokuapp.com/parse"
         }
         Parse.initialize(with: configuration)
+    
         
     }
+    
+    
     
     
 

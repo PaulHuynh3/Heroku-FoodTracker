@@ -130,7 +130,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="save" id="VuN-Xz-qB2">
                             <connections>
-                                <segue destination="S7g-xS-lZI" kind="unwind" unwindAction="unwindToMealListWithSender:" id="5za-9Z-TL0"/>
+                                <action selector="saveButtonTapped:" destination="BYZ-38-t0r" id="U4A-Rf-jfC"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -142,7 +142,6 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-                <exit id="S7g-xS-lZI" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="uCp-mg-A2M">
                     <connections>
                         <action selector="selectImageFromPhotoLibrary:" destination="BYZ-38-t0r" id="EfJ-Ls-A39"/>
@@ -192,6 +191,6 @@
         <image name="defaultphoto_2x" width="640" height="640"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="TY7-cQ-FLW"/>
+        <segue reference="JAE-05-E82"/>
     </inferredMetricsTieBreakers>
 </document>
